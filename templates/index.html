@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        a {
+            color: #06c;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .copy-link {
+            cursor: pointer;
+            color: #06c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>文件上传</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="上传">
+        </form>
+
+        <h2>已上传文件</h2>
+        <table>
+            <tr>
+                <th>文件名称</th>
+                <th>操作</th>
+                <th>删除</th>
+            </tr>
+            {% for file in files %}
+            <tr>
+                <td>{{ file }}</td>
+                <td><span class="copy-link" onclick="copyToClipboard('{{ url_for('download_file', filename=file) }}')">复制下载链接</span></td>
+                <td><a href="{{ url_for('delete_file', filename=file) }}" onclick="return confirm('确定删除该文件吗？');">删除</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(window.location.origin + text);
+            alert("复制成功: " + window.location.origin + text);
+        }
+    </script>
+</body>
+</html>
